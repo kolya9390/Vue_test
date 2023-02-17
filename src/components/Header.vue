@@ -8,8 +8,9 @@
       </ul>
     </nav>
     <div class="header-right">
-      <button class="header-btn" @click="showLoginModal = true; showRegistration = false">Login</button>
-      <button class="header-btn" @click="showRegistration = true; showLoginModal = false">Registration</button>
+      <button v-if="!isLoggedIn" class="header-btn" @click="showLoginModal = true; showRegistration = false">Login</button>
+      <button v-if="!isLoggedIn" class="header-btn" @click="showRegistration = true; showLoginModal = false">Registration</button>
+      <button v-if="isLoggedIn" class="header-btn" @click="logoutUser">Logout</button>
     </div>
     <modal v-if="showLoginModal" @close="showLoginModal = false">
       <!-- форма для аунтификации пользователя -->
@@ -32,13 +33,21 @@ export default {
       showLoginModal: false,
       showRegistration: false
     };
+  },
+  computed: {
+    isLoggedIn() {
+      return localStorage.getItem('token') !== null;
+    }
+  },
+  methods: {
+    logoutUser() {
+      localStorage.removeItem('token');
+    }
   }
 };
 </script>
 
-<style>
-/* стили для header */
-</style>
+
 <style>
 header {
   display: flex;

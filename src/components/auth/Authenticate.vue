@@ -6,7 +6,8 @@
         <label for="email">email:</label>
         <input
             type="text"
-            id="username"
+            id="email"
+            name="email"
             v-model="form.email"
             required
         />
@@ -16,6 +17,7 @@
         <input
             type="password"
             id="password"
+            name="password"
             v-model="form.password"
             required
         />
@@ -27,27 +29,39 @@
     </form>
   </div>
 </template>
-
 <script>
+import axios from "axios";
+
 export default {
   data() {
     return {
-      email: "",
-      password: ""
-    };
+      form: {
+        email: '',
+        password: ''
+      },
+      errorMessage: ''
+    }
   },
   methods: {
-    login: function() {
-      let email = this.email;
-      let password = this.password;
-      this.$store
-          .dispatch("login", { email, password })
-          .then(() => this.$router.push("/"))
-          .catch(err => console.log(err));
+    async loginUser() {
+      try {
+        const response = await axios.post('http://localhost:8080/user/signin',
+            'grant_type=&username=' + this.form.email + '&password=' + this.form.password + '&scope=&client_id=&client_secret=',
+            {
+              headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+              }
+            });
+        localStorage.setItem('token', response.data.access_token);
+      } catch (error) {
+        console.error(error);
+      }
     }
   }
-};
+}
+
 </script>
+
 
 <style>
 .auth-form {

@@ -1,48 +1,59 @@
 <template>
-  <div>
-    <form class="login" @submit.prevent="login">
-      <h1>Sign in</h1>
-      <label>User name</label>
-      <input required v-model="username" type="text" placeholder="Snoopy" />
-      <label>Password</label>
-      <input
-          required
-          v-model="password"
-          type="password"
-          placeholder="Password"
-      />
-      <hr />
-      <button type="submit">Login</button>
+  <div class="auth-form">
+    <h2>Login</h2>
+    <form @submit.prevent="loginUser">
+      <div class="form-group">
+        <label for="email">email:</label>
+        <input
+            type="text"
+            id="username"
+            v-model="form.email"
+            required
+        />
+      </div>
+      <div class="form-group">
+        <label for="password">Password:</label>
+        <input
+            type="password"
+            id="password"
+            v-model="form.password"
+            required
+        />
+      </div>
+      <div class="form-group">
+        <button type="submit" class="btn btn-primary">Login</button>
+      </div>
+      <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
     </form>
   </div>
 </template>
 
-<style>
-.login {
-  display: flex;
-  flex-direction: column;
-  width: 300px;
-  padding: 10px;
-}
-</style>
-
 <script>
-//import { AUTH_REQUEST } from "@/store/actions";
+import axios from "axios";
+
 export default {
-  name: "login",
   data() {
     return {
-      username: "dogo",
-      password: "dogy"
-    };
+      form: {
+        email: '',
+        password: ''
+      },
+      errorMessage: ''
+    }
   },
   methods: {
-    login: function() {
-      const { username, password } = this;
-      this.$store.dispatch(AUTH_REQUEST, { username, password }).then(() => {
-        this.$router.push("/");
-      });
+    async loginUser() {
+      try {
+        const response = await axios.post('http://localhost:8080/user/signin', {
+          email: this.form.email,
+          password: this.form.password
+        });
+        localStorage.setItem('token', response.data.access_token);
+      } catch (error) {
+        console.error(error);
+      }
     }
   }
-};
+}
+
 </script>

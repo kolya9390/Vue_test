@@ -3,9 +3,8 @@
     <ul>
       <li v-for="event in events" :key="event.id">
         {{ event.title }}
-        {{event.id}}
         {{event.creator}}
-        <button class="delete-btn" @click="deleteEvent(event.id)">Delete</button>
+        <button class="delete-btn" @click="deleteEvent(event._id)">Delete</button>
 
         <button class="update-btn">Update</button>
       </li>
