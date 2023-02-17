@@ -27,7 +27,7 @@
 </style>
 
 <script>
-// import { AUTH_REQUEST } from "actions/auth";
+//import { AUTH_REQUEST } from "@/store/actions";
 export default {
   name: "login",
   data() {

@@ -56,7 +56,7 @@ export default {
     },
     deleteEvent(eventId) {
       const token = localStorage.getItem('token');
-      axios.delete(`http://localhost:8080/${eventId}`, {
+      axios.delete(`http://localhost:8080/event/${eventId}`, {
         headers: {
           Authorization: `Bearer ${token}`
         }

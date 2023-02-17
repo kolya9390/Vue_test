@@ -29,35 +29,26 @@
 </template>
 
 <script>
-import axios from "axios";
-
 export default {
   data() {
     return {
-      form: {
-        email: '',
-        password: ''
-      },
-      errorMessage: ''
-    }
+      email: "",
+      password: ""
+    };
   },
   methods: {
-    async loginUser() {
-      try {
-        const response = await axios.post('http://localhost:8080/user/signin',
-            {
-          email: this.form.username,
-          password: this.form.password
-        });
-        localStorage.setItem('token', response.data.access_token);
-        this.$router.push('/');
-      } catch (error) {
-        this.errorMessage = error.response.data.message;
-      }
+    login: function() {
+      let email = this.email;
+      let password = this.password;
+      this.$store
+          .dispatch("login", { email, password })
+          .then(() => this.$router.push("/"))
+          .catch(err => console.log(err));
     }
   }
-}
+};
 </script>
+
 <style>
 .auth-form {
   width: 400px;

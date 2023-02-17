@@ -10,6 +10,7 @@ import Events from "@/components/Events.vue";
 import Modal from "@/components/Modal.vue";
 import auth from "@/components/auth/Authenticate.vue"
 import Authenticate from "@/components/auth/Authenticate.vue";
+import Registration from "@/components/auth/Registration.vue";
 
 
 export default {
@@ -34,7 +35,7 @@ export default {
   <router-view />
   </div>
 <div>
-  <Authenticate/>
+
 </div>
 <div>
   <Events/>

@@ -2,39 +2,43 @@
   <header>
     <nav class="header-left">
       <ul>
-        <li><a href="/home">Home</a></li>
+        <li><a href="/">Home</a></li>
         <li><a href="#">About</a></li>
         <li><a href="#">Contact</a></li>
       </ul>
     </nav>
     <div class="header-right">
-      <button class="header-btn" @click="openLoginModal">Login</button>
-      <button class="header-btn">Registration</button>
+      <button class="header-btn" @click="showLoginModal = true; showRegistration = false">Login</button>
+      <button class="header-btn" @click="showRegistration = true; showLoginModal = false">Registration</button>
     </div>
     <modal v-if="showLoginModal" @close="showLoginModal = false">
       <!-- форма для аунтификации пользователя -->
     </modal>
   </header>
+  <Registration v-if="showRegistration" @close="showRegistration = false" />
 </template>
+
 <script>
-import Modal from './Modal.vue';
+import Modal from './auth/Authenticate.vue';
+import Registration from './auth/Registration.vue';
 
 export default {
   components: {
-    Modal
+    Modal,
+    Registration
   },
   data() {
     return {
-      showLoginModal: false
+      showLoginModal: false,
+      showRegistration: false
     };
-  },
-  methods: {
-    openLoginModal() {
-      this.showLoginModal = true;
-    }
   }
 };
 </script>
+
+<style>
+/* стили для header */
+</style>
 <style>
 header {
   display: flex;

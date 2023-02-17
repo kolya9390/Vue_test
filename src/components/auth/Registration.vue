@@ -1,44 +1,104 @@
 <template>
-  <div>
-    <h1 style="text-align: center;">Registration</h1>
-    <form style="display: flex; flex-direction: column; align-items: center;">
-      <label for="name" style="margin-top: 1rem;">Name:</label>
-      <input id="name" v-model="name" type="text" style="width: 300px; padding: 0.5rem; margin-top: 0.5rem;" />
-      <label for="username" style="margin-top: 1rem;">Username:</label>
-      <input id="username" v-model="username" type="text" style="width: 300px; padding: 0.5rem; margin-top: 0.5rem;" />
-      <label for="email" style="margin-top: 1rem;">Email:</label>
-      <input id="email" v-model="email" type="email" style="width: 300px; padding: 0.5rem; margin-top: 0.5rem;" />
-
-      <label for="password" style="margin-top: 1rem;">Password:</label>
-      <input id="password" v-model="password" type="password" style="width: 300px; padding: 0.5rem; margin-top: 0.5rem;" />
-
-      <label for="confirmPassword" style="margin-top: 1rem;">Confirm Password:</label>
-      <input id="confirmPassword" v-model="confirmPassword" type="password" style="width: 300px; padding: 0.5rem; margin-top: 0.5rem;" />
-
-      <label for="birthdate" style="margin-top: 1rem;">Birthdate:</label>
-      <input id="birthdate" v-model="birthdate" type="date" style="width: 300px; padding: 0.5rem; margin-top: 0.5rem;" />
-
-      <button @click.prevent="submitRegistrationForm" style="margin-top: 1rem; padding: 0.5rem 1rem; background-color: lightblue;">Submit</button>
+  <div v-if="!showSuccessMessage" class="registration-form">
+    <h2>REG</h2>
+    <form @submit.prevent="signupUser">
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input id="email" v-model="email" type="email" required />
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input id="password" v-model="password" type="password" required />
+      </div>
+      <button type="submit">registration</button>
     </form>
+    <div v-if="showErrorMessage" class="error-message">
+      User with this email already exists
+    </div>
+  </div>
+  <div v-if="showSuccessMessage" class="success-message">
+    User successfully registered! Redirecting to homepage...
   </div>
 </template>
 <script>
+import axios from "axios";
 export default {
   data() {
     return {
-      name: '',
-      username: '',
-      email: '',
-      password: '',
-      confirmPassword: '',
-      birthdate: ''
-    }
+      email: "",
+      password: "",
+      showSuccessMessage: false,
+      showErrorMessage: false,
+    };
   },
   methods: {
-    submitRegistrationForm() {
-      // send a request to the server with the registration data
-      // and handle the response
-    }
-  }
-}
+    async signupUser() {
+      try {
+        await axios.post(
+            "http://localhost:8080/user/signup",
+            {
+              email: this.email,
+              password: this.password,
+            }
+        );
+        this.showSuccessMessage = true;
+        setTimeout(() => {
+          this.$router.push("/");
+        }, 3000);
+      } catch (error) {
+        console.error(error);
+        if (error.response.status === 409) {
+          this.showErrorMessage = true;
+        }
+      }
+    },
+  },
+};
 </script>
+
+<style>
+.registration-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 50px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  width: 300px;
+  margin-top: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+}
+
+label {
+  margin-bottom: 5px;
+}
+
+input {
+  padding: 5px;
+  font-size: 16px;
+}
+
+button {
+  margin-top: 20px;
+  padding: 10px;
+  font-size: 16px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.success-message {
+  margin-top: 20px;
+  font-size: 18px;
+  text-align: center;
+}
+</style>
