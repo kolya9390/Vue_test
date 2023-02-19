@@ -17,7 +17,7 @@
     </div>
   </div>
   <div v-if="showSuccessMessage" class="success-message">
-    User successfully registered! Redirecting to homepage...
+    Успешная регистрация, теперь вы можете аунтифицироваться на сайте.
   </div>
 </template>
 <script>

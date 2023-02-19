@@ -3,6 +3,7 @@ import Header from "@/components/Header.vue";
 import Back from "@/components/Back.vue";
 import Events from "@/components/Events.vue";
 import Modal from "@/components/Modal.vue";
+import Create_Event from "@/components/Create_Event.vue";
 
 
 
@@ -13,6 +14,7 @@ export default {
     Events,
     Back,
     Header,
+    Create_Event
 
   }
 }
@@ -25,7 +27,7 @@ export default {
   <router-view />
   </div>
 <div>
-
+<Create_Event></Create_Event>
 </div>
 <div>
   <Events/>
