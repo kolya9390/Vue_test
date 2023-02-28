@@ -1,11 +1,12 @@
 <template>
   <div class="auth-form">
-    <h2>Login</h2>
-    <form @submit.prevent="loginUser">
+    <h2 v-if="isLoggedIn">Hello, {{ username }}!</h2>
+    <h2 v-else>Login</h2>
+    <form v-if="!isLoggedIn" @submit.prevent="loginUser">
       <div class="form-group">
-        <label for="email">email:</label>
+        <label for="email">Email:</label>
         <input
-            type="text"
+            type="email"
             id="email"
             name="email"
             v-model="form.email"
@@ -24,11 +25,16 @@
       </div>
       <div class="form-group">
         <button type="submit" class="btn btn-primary">Login</button>
+        <button v-if="showRegistration" type="button" class="btn btn-secondary" @click="showRegistration = false">Cancel</button>
       </div>
       <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
     </form>
+    <div v-else>
+      <button class="btn btn-primary" @click="logoutUser">Logout</button>
+    </div>
   </div>
 </template>
+
 <script>
 import axios from "axios";
 
@@ -36,32 +42,55 @@ export default {
   data() {
     return {
       form: {
-        email: '',
-        password: ''
+        email: "",
+        password: "",
       },
-      errorMessage: ''
-    }
+      errorMessage: "",
+      showRegistration: false,
+    };
+  },
+  computed: {
+    isLoggedIn() {
+      return localStorage.getItem("token") !== null;
+    },
+    username() {
+      return localStorage.getItem("username") || "User";
+    },
   },
   methods: {
     async loginUser() {
       try {
-        const response = await axios.post('http://localhost:8080/user/signin',
-            'grant_type=&username=' + this.form.email + '&password=' + this.form.password + '&scope=&client_id=&client_secret=',
+        const response = await axios.post(
+            "http://localhost:8080/user/signin",
+            "grant_type=&username=" +
+            this.form.email +
+            "&password=" +
+            this.form.password +
+            "&scope=&client_id=&client_secret=",
             {
               headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-              }
-            });
-        localStorage.setItem('token', response.data.access_token);
-
+                "Content-Type": "application/x-www-form-urlencoded",
+              },
+            }
+        );
+        localStorage.setItem("token", response.data.access_token);
+        localStorage.setItem("username", response.data.username);
+        this.$emit("login-success");
       } catch (error) {
         console.error(error);
+        this.errorMessage = "Invalid email or password";
       }
-    }
-  }
-}
-
+    },
+    logoutUser() {
+      localStorage.removeItem("token");
+      localStorage.removeItem("username");
+      this.$emit("logout-success");
+    },
+  },
+};
 </script>
+
+
 
 
 <style>

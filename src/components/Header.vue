@@ -1,28 +1,27 @@
 <template>
   <header>
-    <nav class="header-left">
+    <nav class="header-left" role="navigation" aria-label="Main Navigation">
       <ul>
-        <li><a href="/">Home</a></li>
-        <li><a href="#">About</a></li>
-        <li><a href="#">Contact</a></li>
+        <li><router-link to="/">Home</router-link></li>
+        <li><router-link to="/about">About</router-link></li>
+        <li><router-link to="/contact">Contact</router-link></li>
       </ul>
     </nav>
     <div class="header-right">
-      <button v-if="!isLoggedIn" class="header-btn" @click="showLoginModal = true; showRegistration = false">Login</button>
-      <button v-if="!isLoggedIn" class="header-btn" @click="showRegistration = true; showLoginModal = false">Registration</button>
-      <button v-if="isLoggedIn" class="header-btn" @click="logoutUser">Logout</button>
+      <button v-if="!loggedIn" class="btn btn-primary" @click="showLoginModal = true; showRegistration = false">Login</button>
+      <button v-if="!loggedIn" class="btn btn-secondary" @click="showRegistration = true; showLoginModal = false">Registration</button>
+      <button v-if="loggedIn" class="btn btn-primary" @click="logoutUser">Logout</button>
     </div>
-    <modal v-if="showLoginModal" @close="showLoginModal = false">
-      <!-- форма для аунтификации пользователя -->
-    </modal>
+    <Modal v-if="showLoginModal" @close="showLoginModal = false" @login-success="loginSuccess" />
   </header>
-  <Registration v-if="showRegistration" @close="showRegistration = false" />
+  <Registration v-if="showRegistration" @close="showRegistration = false" @register-success="registerUser" />
+  <div v-if="successMessage" class="alert alert-success" role="alert">
+    {{ successMessage }}
+  </div>
 </template>
-
 <script>
 import Modal from './auth/Authenticate.vue';
 import Registration from './auth/Registration.vue';
-
 export default {
   components: {
     Modal,
@@ -31,7 +30,10 @@ export default {
   data() {
     return {
       showLoginModal: false,
-      showRegistration: false
+      showRegistration: false,
+      username: 'Admin',
+      successMessage: '',
+      loggedIn: false
     };
   },
   computed: {
@@ -39,27 +41,58 @@ export default {
       return localStorage.getItem('token') !== null;
     }
   },
+  created() {
+    this.username = localStorage.getItem('Hi');
+    this.loggedIn = this.isLoggedIn;
+    if (this.isLoggedIn) {
+      this.showLoginModal = false;
+      this.showRegistration = false;
+    }
+  },
   methods: {
+    loginSuccess() {
+      this.showLoginModal = false;
+      this.loggedIn = true;
+      this.successMessage = 'You have successfully logged in!';
+    },
     logoutUser() {
       localStorage.removeItem('token');
+      localStorage.removeItem('username');
+      this.username = 'Admin';
+      this.loggedIn = false;
+      this.successMessage = 'You have successfully logged out!';
+      this.showLoginModal = false;
+      this.showRegistration = false;
+    },
+    registerUser() {
+      this.successMessage = 'You have successfully registered!';
+      this.showLoginModal = false;
+      this.showRegistration = false;
+    },
+    cancelLogout() {
+      this.showLoginModal = false;
+      this.showRegistration = false;
     }
   }
 };
 </script>
 
 
+
 <style>
 header {
+  background-image: linear-gradient(to bottom, rgba(152, 90, 39, 0.8), rgba(152, 90, 39, 0.8));
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 20px;
-  background-color: #2427a8;
-  color: #fff;
+  background-color: #ffffff;
+  color: #110202;
 }
 
 .header-left {
   display: flex;
+  align-items: center;
 }
 
 .header-left ul {
@@ -69,25 +102,65 @@ header {
   padding: 0;
 }
 
+.header-left ul li {
+  margin-right: 10px;
+}
+
 .header-left ul li a {
-  color: #ffffff;
+  color: #110202;
   text-decoration: none;
-  padding: 0 10px;
+  font-weight: bold;
 }
 
 .header-right {
   display: flex;
+  align-items: center;
 }
 
-.header-btn {
-  background-color: #f6ecec;
-  color: #0e1812;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
-  text-transform: uppercase;
+.header-welcome {
+  margin-right: 10px;
   font-weight: bold;
-  cursor: pointer;
-  margin-left: 10px;
+  color: #110202;
 }
+
+.btn {
+  margin-left: 10px;
+  background-color: #110202;
+  color: #ffffff;
+  padding: 5px 10px;
+  border-radius: 5px;
+  text-decoration: none;
+}
+
+@media (max-width: 768px) {
+  .header-left ul {
+    display: none;
+  }
+
+  .burger {
+    display: flex;
+  }
+}
+
+.burger {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background-color: #ffffff;
+  color: #110202;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.burger span {
+  display: block;
+  width: 25px;
+  height: 3px;
+  background-color: #110202;
+  margin: 5px;
+  border-radius: 3px;
+}
+
 </style>
