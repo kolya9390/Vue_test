@@ -1,17 +1,29 @@
 <template>
   <header>
-    <nav class="header-left" role="navigation" aria-label="Main Navigation">
-      <ul>
-        <li>Home</li>
-        <li>About</li>
-        <li>Contact</li>
-      </ul>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light" role="navigation" aria-label="Main Navigation">
+      <a class="navbar-brand" href="#">My App</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="#">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">About</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Contact</a>
+          </li>
+        </ul>
+        <div class="header-right">
+          <button v-if="!loggedIn" class="btn btn-primary ml-2" @click="showLoginModal = true; showRegistration = false">Login</button>
+          <button v-if="!loggedIn" class="btn btn-secondary ml-2" @click="showRegistration = true; showLoginModal = false">Registration</button>
+          <button v-if="loggedIn" class="btn btn-primary ml-2" @click="logoutUser">Logout</button>
+        </div>
+      </div>
     </nav>
-    <div class="header-right">
-      <button v-if="!loggedIn" class="btn btn-primary" @click="showLoginModal = true; showRegistration = false">Login</button>
-      <button v-if="!loggedIn" class="btn btn-secondary" @click="showRegistration = true; showLoginModal = false">Registration</button>
-      <button v-if="loggedIn" class="btn btn-primary" @click="logoutUser">Logout</button>
-    </div>
     <Authenticate v-if="showLoginModal" @close="showLoginModal = false" @login-success="loginSuccess" />
   </header>
   <Registration v-if="showRegistration" @close="showRegistration = false" @register-success="registerUser" />
@@ -19,6 +31,8 @@
     {{ successMessage }}
   </div>
 </template>
+
+
 <script>
 import Authenticate from './auth/Authenticate.vue';
 import Registration from './auth/Registration.vue';
@@ -77,11 +91,10 @@ export default {
 };
 </script>
 
-
-
 <style>
+
 header {
-  background-image: linear-gradient(to bottom, rgba(152, 90, 39, 0.8), rgba(152, 90, 39, 0.8));
+  background-image: linear-gradient(to bottom, rgba(152, 90, 39, 0.3), rgba(152, 90, 39, 0.38));
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -90,56 +103,61 @@ header {
   color: #110202;
 }
 
-.header-left {
-  display: flex;
-  align-items: center;
-}
-
-.header-left ul {
-  display: flex;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.header-left ul li {
-  margin-right: 10px;
-}
-
-.header-left ul li a {
-  color: #110202;
-  text-decoration: none;
-  font-weight: bold;
-}
-
 .header-right {
   display: flex;
   align-items: center;
-}
-
-
-.btn {
-  margin-left: 10px;
-  background-color: #110202;
-  color: #ffffff;
-  padding: 5px 10px;
-  border-radius: 5px;
-  text-decoration: none;
 }
 
 @media (max-width: 768px) {
   .header-left ul {
     display: none;
   }
+}
 
+.navbar-nav li {
+  margin-right: 10px;
+}
 
-  .burger span {
-    display: block;
-    width: 25px;
-    height: 3px;
-    background-color: #110202;
-    margin: 5px;
-    border-radius: 3px;
+.navbar-nav li:last-child {
+  margin-right: 0;
+}
+
+.navbar-brand {
+  font-size: 24px;
+  font-weight: bold;
+  margin-right: 30px;
+}
+
+.btn {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.btn-primary {
+  background-color: #1a1a1a;
+  border-color: #1a1a1a;
+}
+
+.btn-primary:hover {
+  background-color: #323232;
+  border-color: #323232;
+}
+
+.btn-secondary {
+  background-color: #ffffff;
+  border-color: #808080;
+  color: #808080;
+}
+
+.btn-secondary:hover {
+  background-color: #f0f0f0;
+  border-color: #808080;
+  color: #808080;
+}
+
+@media (max-width: 768px) {
+  .header-left ul {
+    display: none;
   }
 }
 

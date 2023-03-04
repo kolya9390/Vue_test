@@ -1,7 +1,6 @@
 <template>
   <div class="auth-form">
     <h2 v-if="isLoggedIn">Hello, {{ username }}!</h2>
-    <h2 v-else>Login</h2>
     <form v-if="!isLoggedIn" @submit.prevent="loginUser">
       <div class="form-group">
         <label for="email">Email:</label>

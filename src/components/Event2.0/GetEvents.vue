@@ -1,8 +1,7 @@
 <template>
   <div>
-    <button @click="toggleCreateEvent">Создать событие</button>
+    <button class="btn btn-primary mb-3" @click="toggleCreateEvent">Создать событие</button>
     <create-event v-if="isCreateEventVisible" @close="hideCreateEvent" @eventCreated="fetchEvents" />
-    <!-- остальной контент -->
   </div>
   <div class="container">
     <div v-if="editingEvent">
@@ -14,7 +13,6 @@
         <div class="form-group">
           <label for="edit-description">Описание</label>
           <textarea id="edit-description" v-model="editedEvent.description" class="form-control" autocomplete="off" maxlength="150"></textarea>
-          <!-- Добавлен атрибут maxlength для ограничения количества символов в описании события -->
         </div>
         <div class="form-group">
           <label for="edit-location">Место проведения</label>
@@ -26,34 +24,23 @@
         </div>
       </form>
     </div>
-    <div class="row card-container">
-      <div v-for="event in events" :key="event.id" class="col-sm-12 col-md-6 col-lg-4 card mb-4">
-        <div v-if="!editingEvent">
-
-          <div class="card-content">
-            <h3 class="card-title mb-1">{{ event.title.substring(0, 50) }}</h3>
+    <div class="row">
+      <div v-for="event in events" :key="event.id" class="col-sm-12 col-md-6 col-lg-4 mb-4">
+        <div v-if="!editingEvent" class="card h-100">
+          <div class="card-body">
+            <h5 class="card-title mb-1">{{ event.title.substring(0, 50) }}</h5>
             <p class="card-text">{{ event.description}}</p>
-            <!-- Добавлено ограничение на количество символов в описании события -->
+            <div class="d-flex flex-wrap align-items-center justify-content-between">
+              <div class="tags mb-2">
+                <span class="badge badge-secondary mr-1 mb-1" v-for="tag in event.tags" :key="tag">{{ tag }}</span>
+              </div>
+              <p class="card-location mb-2">{{ event.location }}</p>
+            </div>
+            <div class="card-creator">Создатель: {{ event.creator }}</div>
           </div>
-          <div class="tags">
-            <span class="tag" v-for="tag in event.tags" :key="tag">{{ tag }}</span>
-          </div>
-
-
-
-          <p class="card-location mb-2">{{ event.location }}</p>
-
-          <div class="card-creator">Создатель: {{ event.creator }}</div>
-
-          <div class="card-buttons">
-
-
-            <button class="delete-btn" @click="deleteEvent(event._id)">
-              Удалить
-            </button>
-            <button class="update-btn" @click="startEdit(event)">
-              Редактировать
-            </button>
+          <div class="card-footer d-flex justify-content-end">
+            <button class="btn btn-danger mr-2" @click="deleteEvent(event._id)">Удалить</button>
+            <button class="btn btn-primary" @click="startEdit(event)">Редактировать</button>
           </div>
         </div>
       </div>
@@ -148,97 +135,7 @@ export default {
 
 
 <style>
-.card-container {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1rem;
-}
-
 .card {
-  margin-bottom: 20px;
-  background-color: white;
-  box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.15);
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  overflow: hidden;
-}
-
-.card-content {
-  padding: 1rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  height: 100%;
-}
-
-.card-title {
-  margin-top: 0;
-  font-size: 1.2rem;
-}
-
-.card-text {
-  margin-bottom: 1rem;
-  max-height: 5.5rem;
-  overflow: hidden;
-}
-
-.tags {
-  display: flex;
-  flex-wrap: wrap;
-  margin-top: 10px;
-}
-
-.tag {
-  background-color: #efc9c9;
-  border-radius: 10px;
-  color: #333;
-  font-size: 14px;
-  font-weight: 500;
-  margin-right: 5px;
-  margin-bottom: 5px;
-  padding: 5px 10px;
-  cursor: pointer;
-}
-
-.tag:hover {
-  background-color: #333;
-  color: #fff;
-}
-
-
-.card-location {
-  margin-bottom: 0.5rem;
-}
-
-.card-creator {
-  font-size: 0.8rem;
-  margin-bottom: 0.5rem;
-  color: #777;
-}
-
-.card-buttons {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-}
-
-.delete-btn {
-  background-color: #f64f4f;
-  color: white;
-  padding: 0.5em 1em;
-  border-radius: 5px;
-  border: none;
-  cursor: pointer;
-  margin-left: 0.5rem;
-}
-
-.update-btn {
-  background-color: #007bff;
-  color: white;
-  padding: 0.5em 1em;
-  border-radius: 5px;
-  border: none;
-  cursor: pointer;
-  margin-left: 0.5rem;
+  height: 400px; /* задаем фиксированную высоту карточки */
 }
 </style>
