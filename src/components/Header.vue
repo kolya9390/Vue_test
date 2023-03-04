@@ -2,9 +2,9 @@
   <header>
     <nav class="header-left" role="navigation" aria-label="Main Navigation">
       <ul>
-        <li><router-link to="/">Home</router-link></li>
-        <li><router-link to="/about">About</router-link></li>
-        <li><router-link to="/contact">Contact</router-link></li>
+        <li>Home</li>
+        <li>About</li>
+        <li>Contact</li>
       </ul>
     </nav>
     <div class="header-right">
@@ -12,7 +12,7 @@
       <button v-if="!loggedIn" class="btn btn-secondary" @click="showRegistration = true; showLoginModal = false">Registration</button>
       <button v-if="loggedIn" class="btn btn-primary" @click="logoutUser">Logout</button>
     </div>
-    <Modal v-if="showLoginModal" @close="showLoginModal = false" @login-success="loginSuccess" />
+    <Authenticate v-if="showLoginModal" @close="showLoginModal = false" @login-success="loginSuccess" />
   </header>
   <Registration v-if="showRegistration" @close="showRegistration = false" @register-success="registerUser" />
   <div v-if="successMessage" class="alert alert-success" role="alert">
@@ -20,11 +20,11 @@
   </div>
 </template>
 <script>
-import Modal from './auth/Authenticate.vue';
+import Authenticate from './auth/Authenticate.vue';
 import Registration from './auth/Registration.vue';
 export default {
   components: {
-    Modal,
+    Authenticate,
     Registration
   },
   data() {
@@ -117,11 +117,6 @@ header {
   align-items: center;
 }
 
-.header-welcome {
-  margin-right: 10px;
-  font-weight: bold;
-  color: #110202;
-}
 
 .btn {
   margin-left: 10px;
@@ -137,30 +132,15 @@ header {
     display: none;
   }
 
-  .burger {
-    display: flex;
+
+  .burger span {
+    display: block;
+    width: 25px;
+    height: 3px;
+    background-color: #110202;
+    margin: 5px;
+    border-radius: 3px;
   }
-}
-
-.burger {
-  display: none;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  background-color: #ffffff;
-  color: #110202;
-  border-radius: 50%;
-  cursor: pointer;
-}
-
-.burger span {
-  display: block;
-  width: 25px;
-  height: 3px;
-  background-color: #110202;
-  margin: 5px;
-  border-radius: 3px;
 }
 
 </style>

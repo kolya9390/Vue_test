@@ -2,14 +2,14 @@
 import Header from "@/components/Header.vue";
 import Back from "@/components/Back.vue";
 import Modal from "@/components/Modal.vue";
-import Eventlist from "@/components/Event2.0/Eventlist.vue";
+import GetEvents from "@/components/Event2.0/GetEvents.vue";
 
 
 
 
 export default {
   components: {
-    Eventlist,
+    GetEvents,
     Modal,
     Back,
     Header
@@ -23,14 +23,13 @@ export default {
 <template>
   <div>
     <Header></Header>
-  <router-view />
   </div>
-
+<GetEvents/>
 <div>
 
 </div>
 <div>
-  <Eventlist/>
+
   </div>
 
   <footer>

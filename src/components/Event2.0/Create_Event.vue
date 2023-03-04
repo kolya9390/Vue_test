@@ -6,10 +6,7 @@
         <label for="title" class="form-label">Title</label>
         <input type="text" id="title" v-model="title" required class="form-control">
       </div>
-      <div class="form-group">
-        <label for="image" class="form-label">Image URL</label>
-        <input type="text" id="image" v-model="image" required class="form-control">
-      </div>
+
       <div class="form-group">
         <label for="description" class="form-label">Description</label>
         <textarea id="description" v-model="description" required class="form-control"></textarea>
