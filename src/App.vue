@@ -3,6 +3,7 @@ import Header from "@/components/Header.vue";
 import Back from "@/components/Back.vue";
 import Modal from "@/components/Modal.vue";
 import GetEvents from "@/components/Event2.0/GetEvents.vue";
+import FilteredEvents from "@/components/Event2.0/FilteredEvents.vue";
 
 
 
@@ -12,7 +13,8 @@ export default {
     GetEvents,
     Modal,
     Back,
-    Header
+    Header,
+    FilteredEvents
 
   },
 
@@ -23,6 +25,11 @@ export default {
 <template>
   <div>
     <Header></Header>
+
+  </div>
+
+  <div>
+
   </div>
 <GetEvents/>
 <div>

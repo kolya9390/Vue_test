@@ -3,6 +3,8 @@
     <button class="btn btn-primary mb-3" @click="toggleCreateEvent">Создать событие</button>
     <create-event v-if="isCreateEventVisible" @close="hideCreateEvent" @eventCreated="fetchEvents" />
   </div>
+  <label for="filter-tags">Фильтр по тегам</label>
+  <input id="filter-tags" v-model="tagFilter" type="text" class="form-control" autocomplete="off" />
   <div class="container">
     <div v-if="editingEvent">
       <form class="edit-form">
@@ -25,7 +27,7 @@
       </form>
     </div>
     <div class="row">
-      <div v-for="event in events" :key="event.id" class="col-sm-12 col-md-6 col-lg-4 mb-4">
+      <div v-for="event in filteredEvents" :key="event.id" class="col-sm-12 col-md-6 col-lg-4 mb-4">
         <div v-if="!editingEvent" class="card h-100">
           <div class="card-body">
             <h5 class="card-title mb-1">{{ event.title.substring(0, 50) }}</h5>
@@ -62,11 +64,23 @@ export default {
       isCreateEventVisible: false,
       events: [],
       editingEvent: null,
-      editedEvent: null
+      editedEvent: null,
+      tagFilter: ''
     };
   },
   created() {
     this.fetchEvents()
+  },
+  computed: {
+    filteredEvents() {
+      if (!this.tagFilter) {
+        return this.events;
+      } else {
+        return this.events.filter(event => {
+          return event.tags.includes(this.tagFilter);
+        });
+      }
+    }
   },
   methods: {
     async fetchEvents() {
@@ -85,12 +99,13 @@ export default {
             Authorization: `Bearer ${token}`
           }
         });
-
         await this.fetchEvents();
       } catch (error) {
         console.error(error);
+        alert('Не удалось удалить событие. Попробуйте еще раз.');
       }
     },
+
     toggleCreateEvent() {
       this.isCreateEventVisible = !this.isCreateEventVisible;
     },
@@ -124,8 +139,10 @@ export default {
         this.editedEvent = null;
       } catch (error) {
         console.error(error);
+        alert('Не удалось сохранить событие. Попробуйте еще раз.');
       }
     },
+
 
 
   }
