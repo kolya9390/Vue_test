@@ -34,7 +34,7 @@
             <p class="card-text">{{ event.description}}</p>
             <div class="d-flex flex-wrap align-items-center justify-content-between">
               <div class="tags mb-2">
-                <span class="badge badge-secondary mr-1 mb-1" v-for="tag in event.tags" :key="tag">{{ tag }}</span>
+                <button class="badge badge-pill badge-secondary mr-1 mb-1" v-for="tag in event.tags" :key="tag" @click="toggleTagFilter(tag)">{{ tag }}</button>
               </div>
               <p class="card-location mb-2">{{ event.location }}</p>
             </div>
@@ -82,7 +82,13 @@ export default {
       }
     }
   },
-  methods: {
+  methods: {toggleTagFilter(tag) {
+      if (this.tagFilter === tag) {
+        this.tagFilter = '';
+      } else {
+        this.tagFilter = tag;
+      }
+    },
     async fetchEvents() {
       try {
         const response = await axios.get('http://localhost:8080/event');
