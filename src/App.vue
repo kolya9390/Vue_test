@@ -28,12 +28,9 @@ export default {
 
   </div>
 
-  <div>
-
-  </div>
 <GetEvents/>
 <div>
-
+<h1> Git?</h1>
 </div>
 <div>
 
